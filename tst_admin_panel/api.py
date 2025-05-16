@@ -6,6 +6,7 @@ from frappe.utils.response import json_handler
 def before_save_user(doc, method):
     if doc.password:
         update_password(doc.user_name, doc.password)
+        doc.password = None
 
 @frappe.whitelist(allow_guest=True)
 def get_website_content():
