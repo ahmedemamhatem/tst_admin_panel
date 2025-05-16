@@ -14,6 +14,15 @@ doc_events = {
         "before_save": "tst_admin_panel.api.before_save_user"
     }
 }
+
+fixtures = [
+    {
+        "doctype": "Workspace",
+        "filters": [
+            ["name", "=", "TST Website"]
+        ]
+    }
+]
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
 # 	{
