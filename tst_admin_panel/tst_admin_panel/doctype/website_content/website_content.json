@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-16 17:55:45.407163",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_name",
+  "section_break_esjm",
+  "content_ar",
+  "column_break_tgwz",
+  "content_en",
+  "section_break_genr",
+  "image"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Section Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "content_en",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Content (EN)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "content_ar",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Content (AR)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_esjm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_tgwz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_genr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-16 18:01:26.838456",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Website Content",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
