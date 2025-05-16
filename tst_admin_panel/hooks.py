@@ -9,7 +9,11 @@ app_license = "mit"
 # ------------------
 
 # required_apps = []
-
+doc_events = {
+    "Website User": {
+        "before_save": "tst_admin_panel.api.before_save_user"
+    }
+}
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
 # 	{
