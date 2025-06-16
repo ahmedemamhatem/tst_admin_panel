@@ -1,0 +1,46 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"QbxDJmnpQv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">TST Website</span>\",\"col\":12}},{\"id\":\"YmyRIE0AGa\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"IiO1BnfcQV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Website Content\",\"col\":3}},{\"id\":\"rL7UcnD-7S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Website User\",\"col\":3}}]",
+ "creation": "2025-06-16 20:08:46.664105",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "external-link",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "TST Website",
+ "links": [],
+ "modified": "2025-06-16 21:44:39.739988",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "TST Website",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 39.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Website Content",
+   "link_to": "Website Content",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Website User",
+   "link_to": "Website User",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "TST Website"
+}
