@@ -17,7 +17,7 @@ def get_website_content():
         # Fetch all website content
         content_list = frappe.get_all(
             'Website Content',
-            fields=['section_name', 'content_en', 'content_ar', 'image']
+            fields=['section_name', 'content_en', 'content_ar', 'attachment']
         )
 
         # Return only the fetched data
