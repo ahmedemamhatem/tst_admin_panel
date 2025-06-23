@@ -8,10 +8,11 @@ def before_save_user(doc, method):
         update_password(doc.user_name, doc.password)
         doc.password = None
 
-@frappe.whitelist(allow_guest=True)
+
+
 def get_website_content():
     """
-    Fetch all website content with readable Arabic text.
+    Fetch all website content with readable Arabic text and full attachment URL.
     """
     try:
         # Fetch all website content
@@ -19,17 +20,26 @@ def get_website_content():
             'Website Content',
             fields=['section_name', 'content_en', 'content_ar', 'attachment']
         )
+        
+        # Get site base URL (e.g. https://yourdomain.com)
+        base_url = frappe.utils.get_url()
+        
+        # Update attachment to full URL
+        for item in content_list:
+            attachment = item.get('attachment')
+            if attachment:
+                # Ensure attachment starts with "/"
+                if not attachment.startswith("/"):
+                    attachment = "/" + attachment
+                item['attachment'] = base_url + attachment
 
-        # Return only the fetched data
         frappe.local.response["http_status_code"] = 200
         return json.dumps(content_list, default=json_handler, ensure_ascii=False)
 
     except Exception as e:
-        # Return only the error message
         frappe.local.response["http_status_code"] = 500
         frappe.log_error(message=str(e), title="Get Website Content API Error")
         return json.dumps({"error": str(e)}, default=json_handler, ensure_ascii=False)
-
 
 def insert_website_content():
     """
