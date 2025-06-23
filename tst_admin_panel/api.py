@@ -9,7 +9,7 @@ def before_save_user(doc, method):
         doc.password = None
 
 
-
+@frappe.whitelist(allow_guest=True)
 def get_website_content():
     """
     Fetch all website content with readable Arabic text and full attachment URL.
