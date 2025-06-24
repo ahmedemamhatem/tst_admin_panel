@@ -3,6 +3,37 @@ from frappe.utils.password import set_encrypted_password, check_password, update
 import json
 from frappe.utils.response import json_handler
 
+import frappe
+
+def update_workspace_after_migration():
+    """
+    Update the Workspace to set 'Module' = 'Tst Admin Panel' where 'name' = 'TST Website'.
+    """
+    try:
+        # Find the workspace with the name "TST Website"
+        workspace_name = "TST Website"
+        new_module = "Tst Admin Panel"
+
+        # Update the workspace's module
+        frappe.db.set_value("Workspace", workspace_name, "module", new_module)
+
+        # Log success
+        frappe.log_error(
+            title="Workspace Updated",
+            message=f"Updated Workspace '{workspace_name}' to Module '{new_module}'."
+        )
+        frappe.msgprint(
+            f"Workspace '{workspace_name}' successfully updated to Module '{new_module}'."
+        )
+    except Exception as e:
+        # Log and raise an error if something goes wrong
+        frappe.log_error(
+            title="Failed to Update Workspace",
+            message=f"Error: {str(e)}"
+        )
+        frappe.throw(f"Failed to update Workspace: {str(e)}")
+
+
 def before_save_user(doc, method):
     if doc.password:
         update_password(doc.user_name, doc.password)

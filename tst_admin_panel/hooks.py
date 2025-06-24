@@ -15,14 +15,18 @@ doc_events = {
     }
 }
 
-fixtures = [
-    {
-        "doctype": "Workspace",
-        "filters": [
-            ["name", "=", "TST Website"]
-        ]
-    }
+after_migrate = [
+    "tst_admin_panel.api.update_workspace_after_migration"
 ]
+
+# fixtures = [
+#     {
+#         "doctype": "Workspace",
+#         "filters": [
+#             ["name", "=", "TST Website"]
+#         ]
+#     }
+# ]
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
 # 	{
