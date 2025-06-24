@@ -5,34 +5,45 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "is_group",
   "section_name",
+  "column_break_iqjd",
+  "parent_website_content",
+  "attachment",
+  "background_image",
+  "video",
   "section_break_esjm",
+  "title_ar",
   "content_ar",
   "column_break_tgwz",
+  "title_en",
   "content_en",
   "section_break_genr",
-  "attachment"
+  "lft",
+  "rgt",
+  "old_parent"
  ],
  "fields": [
   {
    "fieldname": "section_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Section Name",
+   "options": "Website Section",
    "reqd": 1
   },
   {
    "fieldname": "content_en",
    "fieldtype": "Text",
    "in_list_view": 1,
-   "label": "Content (EN)",
+   "label": "Content EN",
    "reqd": 1
   },
   {
    "fieldname": "content_ar",
    "fieldtype": "Text",
    "in_list_view": 1,
-   "label": "Content (AR)",
+   "label": "Content AR",
    "reqd": 1
   },
   {
@@ -45,21 +56,87 @@
   },
   {
    "fieldname": "section_break_genr",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "hidden": 1
   },
   {
    "fieldname": "attachment",
    "fieldtype": "Attach",
    "label": "Attachment"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Old Parent",
+   "options": "Website Content"
+  },
+  {
+   "depends_on": "eval:doc.is_group ==0",
+   "fieldname": "parent_website_content",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Website Content",
+   "options": "Website Content"
+  },
+  {
+   "fieldname": "column_break_iqjd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "title_en",
+   "fieldtype": "Data",
+   "label": "Title EN",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title_ar",
+   "fieldtype": "Data",
+   "label": "Title AR",
+   "reqd": 1
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Attach",
+   "label": "Background Image"
+  },
+  {
+   "fieldname": "video",
+   "fieldtype": "Attach",
+   "label": "Video"
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_tree": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-06-23 16:40:20.935619",
+ "modified": "2025-06-24 10:17:13.650388",
  "modified_by": "Administrator",
  "module": "Tst Admin Panel",
  "name": "Website Content",
+ "nsm_parent_field": "parent_website_content",
  "owner": "Administrator",
  "permissions": [
   {
@@ -76,7 +153,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "timeline_field": "section_name",
+ "title_field": "section_name"
 }

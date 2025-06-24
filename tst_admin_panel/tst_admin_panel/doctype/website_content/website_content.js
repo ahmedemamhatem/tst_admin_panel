@@ -6,3 +6,15 @@
 
 // 	},
 // });
+frappe.ui.form.on("Website Content", {
+    onload: function (frm) {
+        frm.set_query("parent_website_content", function () {
+            return {
+                filters: [
+                    ["is_group", "=", 1], // Only include records where is_group = 1
+                    ["name", "!=", frm.doc.name] // Exclude the current record
+                ]
+            };
+        });
+    }
+});
