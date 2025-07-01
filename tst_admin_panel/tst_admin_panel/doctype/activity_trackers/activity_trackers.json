@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 18:56:58.237571",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "maintitlear",
+  "column_break_lapd",
+  "maintitleen",
+  "section_break_bhbu",
+  "activity_trackers"
+ ],
+ "fields": [
+  {
+   "fieldname": "maintitlear",
+   "fieldtype": "Data",
+   "label": "Main Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_lapd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "maintitleen",
+   "fieldtype": "Data",
+   "label": "Main Title (English)"
+  },
+  {
+   "fieldname": "section_break_bhbu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "activity_trackers",
+   "fieldtype": "Table",
+   "label": "Activity Trackers List",
+   "options": "Activity Tracker"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-01 19:00:01.286610",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Activity Trackers",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

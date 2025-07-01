@@ -1,0 +1,116 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 18:53:42.633764",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "branchnamear",
+  "addressar",
+  "phone",
+  "lat",
+  "column_break_qetw",
+  "branchnameen",
+  "addressen",
+  "hotline",
+  "lng",
+  "section_break_qxet",
+  "descriptionar",
+  "column_break_xkge",
+  "descriptionen"
+ ],
+ "fields": [
+  {
+   "fieldname": "branchnamear",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Branch Name (Arabic)"
+  },
+  {
+   "fieldname": "addressar",
+   "fieldtype": "Data",
+   "label": "Address (Arabic)"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Phone"
+  },
+  {
+   "fieldname": "lat",
+   "fieldtype": "Float",
+   "label": "Latitude"
+  },
+  {
+   "fieldname": "column_break_qetw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "branchnameen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Branch Name (English)"
+  },
+  {
+   "fieldname": "addressen",
+   "fieldtype": "Data",
+   "label": "Address (English)"
+  },
+  {
+   "fieldname": "hotline",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Hotline"
+  },
+  {
+   "fieldname": "lng",
+   "fieldtype": "Float",
+   "label": "Longitude"
+  },
+  {
+   "fieldname": "section_break_qxet",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_xkge",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 18:56:04.454155",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Company Branch",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

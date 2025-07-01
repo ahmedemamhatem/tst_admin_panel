@@ -1,0 +1,114 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 18:46:40.000581",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tablabelar",
+  "titlear",
+  "column_break_iynx",
+  "tablabelen",
+  "titleen",
+  "section_break_dcje",
+  "descriptionar",
+  "column_break_kkrh",
+  "descriptionen",
+  "section_break_bprs",
+  "mediatype",
+  "mediaurl"
+ ],
+ "fields": [
+  {
+   "fieldname": "tablabelar",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Label (Arabic)"
+  },
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_iynx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tablabelen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Label (English)"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Title (English)"
+  },
+  {
+   "fieldname": "section_break_dcje",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_kkrh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_bprs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "mediaurl",
+   "fieldtype": "Attach",
+   "label": "Media File (Image/Video)"
+  },
+  {
+   "fieldname": "mediatype",
+   "fieldtype": "Select",
+   "label": "Media Type",
+   "options": "image\nvideo"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 19:51:53.889081",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "About Us Tab",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

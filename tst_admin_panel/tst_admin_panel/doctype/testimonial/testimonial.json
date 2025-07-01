@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:21:29.110791",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "namear",
+  "positionar",
+  "rate",
+  "column_break_svdb",
+  "nameen",
+  "positionen",
+  "section_break_qrsv",
+  "feedbackar",
+  "column_break_juba",
+  "feedbacken"
+ ],
+ "fields": [
+  {
+   "fieldname": "namear",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Name (Arabic)"
+  },
+  {
+   "fieldname": "positionar",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Position (Arabic)"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Int",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Rating (1–5)"
+  },
+  {
+   "fieldname": "column_break_svdb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nameen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Name (English)"
+  },
+  {
+   "fieldname": "positionen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Position (English)"
+  },
+  {
+   "fieldname": "section_break_qrsv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "feedbackar",
+   "fieldtype": "Small Text",
+   "label": "Feedback (Arabic)"
+  },
+  {
+   "fieldname": "column_break_juba",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "feedbacken",
+   "fieldtype": "Small Text",
+   "label": "Feedback (English)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 19:23:36.514140",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Testimonial",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

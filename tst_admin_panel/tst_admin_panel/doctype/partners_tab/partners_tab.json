@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:11:18.340398",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "column_break_lgad",
+  "titleen",
+  "section_break_uarh",
+  "image"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_lgad",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tab Title (English)"
+  },
+  {
+   "fieldname": "section_break_uarh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Partner Logo/Image"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 19:13:37.216428",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Partners Tab",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

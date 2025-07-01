@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:04:48.038818",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "iconurl",
+  "value",
+  "column_break_kfge",
+  "labelar",
+  "labelen"
+ ],
+ "fields": [
+  {
+   "fieldname": "iconurl",
+   "fieldtype": "Attach",
+   "label": "Icon (Image)"
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Int",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Value"
+  },
+  {
+   "fieldname": "column_break_kfge",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "labelar",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Label (Arabic)"
+  },
+  {
+   "fieldname": "labelen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Label (English)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 19:06:29.442452",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Achievement",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

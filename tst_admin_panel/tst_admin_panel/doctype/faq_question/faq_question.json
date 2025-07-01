@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:17:10.571624",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "questionar",
+  "answerar",
+  "column_break_nohs",
+  "questionen",
+  "answeren"
+ ],
+ "fields": [
+  {
+   "fieldname": "questionar",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Question (Arabic)"
+  },
+  {
+   "fieldname": "answerar",
+   "fieldtype": "Small Text",
+   "label": "Answer (Arabic)"
+  },
+  {
+   "fieldname": "column_break_nohs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "questionen",
+   "fieldtype": "Data",
+   "in_filter": 1,
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Question (English)"
+  },
+  {
+   "fieldname": "answeren",
+   "fieldtype": "Small Text",
+   "label": "Answer (English)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-01 19:18:51.764184",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "FAQ Question",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

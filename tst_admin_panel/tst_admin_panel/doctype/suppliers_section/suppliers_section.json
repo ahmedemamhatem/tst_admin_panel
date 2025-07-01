@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:14:22.610235",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "column_break_mbjf",
+  "titleen",
+  "section_break_tlyl",
+  "descriptionar",
+  "column_break_hfrf",
+  "descriptionen",
+  "section_break_mord",
+  "company_logo"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "label": "Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_mbjf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "label": "Title (English)"
+  },
+  {
+   "fieldname": "section_break_tlyl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_hfrf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_mord",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "company_logo",
+   "fieldtype": "Table",
+   "label": "Supplier Logos List",
+   "options": "Company Logo"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-01 19:16:03.553661",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Suppliers Section",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

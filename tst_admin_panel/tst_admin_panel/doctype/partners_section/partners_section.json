@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:10:09.158028",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "column_break_sbaq",
+  "titleen",
+  "section_break_ppyc",
+  "descriptionar",
+  "column_break_dnok",
+  "descriptionen",
+  "section_break_gyvp",
+  "partners_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "label": "Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_sbaq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "label": "Title (English)"
+  },
+  {
+   "fieldname": "section_break_ppyc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_dnok",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_gyvp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "partners_tab",
+   "fieldtype": "Table",
+   "label": "Partners Tabs List",
+   "options": "Partners Tab"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-01 19:13:48.330668",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Partners Section",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

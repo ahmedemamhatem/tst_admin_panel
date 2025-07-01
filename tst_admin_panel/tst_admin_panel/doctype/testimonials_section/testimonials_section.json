@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:19:16.207843",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "column_break_vsbq",
+  "titleen",
+  "section_break_yngf",
+  "descriptionar",
+  "column_break_oaop",
+  "descriptionen",
+  "section_break_rdaa",
+  "company_logo",
+  "section_break_ncjm",
+  "testimonial"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "label": "Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_vsbq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "label": "Title (English)"
+  },
+  {
+   "fieldname": "section_break_yngf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_oaop",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_rdaa",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "company_logo",
+   "fieldtype": "Table",
+   "label": "Company Logos List",
+   "options": "Company Logo"
+  },
+  {
+   "fieldname": "section_break_ncjm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "testimonial",
+   "fieldtype": "Table",
+   "label": "Testimonials List",
+   "options": "Testimonial"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-01 19:23:53.298633",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Testimonials Section",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

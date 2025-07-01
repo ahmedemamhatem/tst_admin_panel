@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-01 19:07:07.135754",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "column_break_rxqs",
+  "titleen",
+  "section_break_srrd",
+  "descriptionar",
+  "column_break_jfpe",
+  "descriptionen",
+  "section_break_dwmj",
+  "solution"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "label": "Title (Arabic)"
+  },
+  {
+   "fieldname": "column_break_rxqs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "label": "Title (English)"
+  },
+  {
+   "fieldname": "section_break_srrd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_jfpe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_dwmj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "solution",
+   "fieldtype": "Table",
+   "label": "Solutions List",
+   "options": "Solution"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-01 19:09:51.546427",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Our Solutions",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
