@@ -274,6 +274,19 @@ def get_website_content():
         return base_url + path
 
     try:
+        # Banner Section
+        banner = frappe.get_single("Banner Section")
+        banner_section = {
+            "titleEN": getattr(banner, "titleen", ""),
+            "titleAR": getattr(banner, "titlear", ""),
+            "subtitleEN": getattr(banner, "subtitleen", ""),
+            "subtitleAR": getattr(banner, "subtitlear", ""),
+            "descriptionAR": getattr(banner, "descriptionar", ""),
+            "descriptionEN": getattr(banner, "descriptionen", ""),
+            "backgroundImageUrl": full_url(getattr(banner, "background_image", "")),
+            "videoUrl": full_url(getattr(banner, "video", "")),
+        }
+
         # 1. About Us Section (child table accessed as attribute)
         about_us = frappe.get_single("About Us Section")
         about_us_tabs = getattr(about_us, "aboutus_tabs", [])
@@ -483,6 +496,7 @@ def get_website_content():
 
         frappe.local.response["http_status_code"] = 200
         return {
+            "bannerSection": banner_section,
             "aboutUsSectionData": about_us_section,
             "branchesSectionData": branches_section,
             "activityTrackersData": activity_trackers_section,
@@ -534,7 +548,6 @@ def before_save_user(doc, method):
     if doc.password:
         update_password(doc.user_name, doc.password)
         doc.password = None
-
 
 
 

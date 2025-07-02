@@ -1,0 +1,120 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-02 08:21:17.006570",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titlear",
+  "subtitlear",
+  "column_break_gayx",
+  "titleen",
+  "subtitleen",
+  "section_break_crpa",
+  "descriptionar",
+  "column_break_zrlq",
+  "descriptionen",
+  "section_break_rehf",
+  "immage",
+  "column_break_hksz",
+  "background_image",
+  "column_break_dmet",
+  "video"
+ ],
+ "fields": [
+  {
+   "fieldname": "titlear",
+   "fieldtype": "Data",
+   "label": "Title (Arabic)"
+  },
+  {
+   "fieldname": "subtitlear",
+   "fieldtype": "Data",
+   "label": "Subtitle (Arabic)"
+  },
+  {
+   "fieldname": "column_break_gayx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "titleen",
+   "fieldtype": "Data",
+   "label": "Title (English)"
+  },
+  {
+   "fieldname": "subtitleen",
+   "fieldtype": "Data",
+   "label": "Subtitle (English)"
+  },
+  {
+   "fieldname": "section_break_crpa",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "descriptionar",
+   "fieldtype": "Small Text",
+   "label": "Description (Arabic)"
+  },
+  {
+   "fieldname": "column_break_zrlq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "descriptionen",
+   "fieldtype": "Small Text",
+   "label": "Description (English)"
+  },
+  {
+   "fieldname": "section_break_rehf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "immage",
+   "fieldtype": "Attach",
+   "label": "Banner Image"
+  },
+  {
+   "fieldname": "column_break_hksz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Attach",
+   "label": "Background Image"
+  },
+  {
+   "fieldname": "column_break_dmet",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "video",
+   "fieldtype": "Attach",
+   "label": "Video"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-02 08:24:47.867450",
+ "modified_by": "Administrator",
+ "module": "Tst Admin Panel",
+ "name": "Banner Section",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

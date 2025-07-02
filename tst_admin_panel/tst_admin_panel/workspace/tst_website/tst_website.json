@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"QbxDJmnpQv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">TST Website</span>\",\"col\":12}},{\"id\":\"YmyRIE0AGa\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rL7UcnD-7S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Website User\",\"col\":3}},{\"id\":\"nC2MSgasuO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"About Us Section\",\"col\":3}},{\"id\":\"LAf34SqUrc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Branches Section\",\"col\":3}},{\"id\":\"NoV0UeWnmZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activity Trackers\",\"col\":3}},{\"id\":\"RKnIUrW6xb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Device Installations Regions\",\"col\":3}},{\"id\":\"TPIvCwdegT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Achievements\",\"col\":3}},{\"id\":\"d0iMSn7P8w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Our Solutions\",\"col\":3}},{\"id\":\"K8egdyGEAA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Partners Section\",\"col\":3}},{\"id\":\"vvghHQi9Rx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Suppliers Section\",\"col\":3}},{\"id\":\"fNp1PJy1cZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FAQ Section\",\"col\":3}},{\"id\":\"jzedHOgtV7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Testimonials Section\",\"col\":3}},{\"id\":\"1rgGkQCLSj\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "content": "[{\"id\":\"QbxDJmnpQv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">TST Website</span>\",\"col\":12}},{\"id\":\"YmyRIE0AGa\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"rL7UcnD-7S\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Website User\",\"col\":3}},{\"id\":\"nC2MSgasuO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"About Us Section\",\"col\":3}},{\"id\":\"LAf34SqUrc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Branches Section\",\"col\":3}},{\"id\":\"NoV0UeWnmZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Activity Trackers\",\"col\":3}},{\"id\":\"RKnIUrW6xb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Device Installations Regions\",\"col\":3}},{\"id\":\"TPIvCwdegT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Achievements\",\"col\":3}},{\"id\":\"d0iMSn7P8w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Our Solutions\",\"col\":3}},{\"id\":\"K8egdyGEAA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Partners Section\",\"col\":3}},{\"id\":\"vvghHQi9Rx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Suppliers Section\",\"col\":3}},{\"id\":\"fNp1PJy1cZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"FAQ Section\",\"col\":3}},{\"id\":\"jzedHOgtV7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Testimonials Section\",\"col\":3}},{\"id\":\"w5Wu1vF5nm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Banner Section\",\"col\":3}},{\"id\":\"1rgGkQCLSj\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
  "creation": "2025-06-24 00:33:40.967913",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "TST Website",
  "links": [],
- "modified": "2025-07-01 19:29:12.841005",
+ "modified": "2025-07-02 08:30:16.822894",
  "modified_by": "Administrator",
  "module": "Tst Admin Panel",
  "name": "TST Website",
@@ -30,6 +30,13 @@
    "doc_view": "List",
    "label": "Testimonials Section",
    "link_to": "Testimonials Section",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Banner Section",
+   "link_to": "Banner Section",
    "type": "DocType"
   },
   {
