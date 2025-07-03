@@ -45,7 +45,7 @@
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Rating (1–5)"
+   "label": "Rating (1\u20135)"
   },
   {
    "fieldname": "column_break_svdb",
@@ -94,7 +94,8 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-01 19:23:36.514140",
+ "make_attachments_public": 1,
+ "modified": "2025-07-04 00:09:33.105024",
  "modified_by": "Administrator",
  "module": "Tst Admin Panel",
  "name": "Testimonial",
