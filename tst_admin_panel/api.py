@@ -262,19 +262,18 @@ def get_website_content():
     import frappe
     from frappe.utils import get_url
 
-    base_url = get_url()
-
     def full_url(path):
+        """Return absolute URL for file/image/video paths."""
         if not path:
             return ""
         if path.startswith("http"):
             return path
         if not path.startswith("/"):
             path = "/" + path
-        return base_url + path
+        return get_url() + path
 
     try:
-        # Banner Section
+        # === 1. Banner Section ===
         banner = frappe.get_single("Banner Section")
         banner_section = {
             "titleEN": getattr(banner, "titleen", ""),
@@ -287,7 +286,7 @@ def get_website_content():
             "videoUrl": full_url(getattr(banner, "video", "")),
         }
 
-        # 1. About Us Section (child table accessed as attribute)
+        # === 2. About Us Section ===
         about_us = frappe.get_single("About Us Section")
         about_us_tabs = getattr(about_us, "aboutus_tabs", [])
         about_us_section = {
@@ -313,7 +312,7 @@ def get_website_content():
             ]
         }
 
-        # 2. Branches Section
+        # === 3. Branches Section ===
         branches = frappe.get_single("Branches Section")
         branches_list = getattr(branches, "branches", [])
         branches_section = {
@@ -342,7 +341,7 @@ def get_website_content():
             ]
         }
 
-        # 3. Activity Trackers Section
+        # === 4. Activity Trackers Section ===
         activity_trackers = frappe.get_single("Activity Trackers")
         activity_rows = getattr(activity_trackers, "activity_trackers", [])
         activity_trackers_section = {
@@ -360,7 +359,7 @@ def get_website_content():
             ],
         }
 
-        # 4. Device Installations Regions Section
+        # === 5. Device Installations Regions Section ===
         device_installations = frappe.get_single("Device Installations Regions")
         region_rows = getattr(device_installations, "region_chart_data", [])
         chart_data = {
@@ -377,7 +376,7 @@ def get_website_content():
             "chartData": chart_data
         }
 
-        # 5. Project Achievements Section
+        # === 6. Project Achievements Section ===
         achievements = frappe.get_single("Project Achievements")
         achievement_rows = getattr(achievements, "achievement", [])
         project_achievements_section = {
@@ -388,7 +387,7 @@ def get_website_content():
             "achievements": [
                 {
                     "id": i + 1,
-                    "iconURL": full_url(item.get("iconURL", "")),  
+                    "iconURL": full_url(getattr(row, "iconurl", "")),
                     "labelAR": getattr(row, "labelar", ""),
                     "labelEN": getattr(row, "labelen", ""),
                     "value": getattr(row, "value", 0),
@@ -397,7 +396,7 @@ def get_website_content():
             ],
         }
 
-        # 6. Our Solutions Section
+        # === 7. Our Solutions Section ===
         solutions = frappe.get_single("Our Solutions")
         solution_rows = getattr(solutions, "solution", [])
         our_solutions_section = {
@@ -416,7 +415,7 @@ def get_website_content():
             ],
         }
 
-        # 7. Partners Section (multi-level indirection)
+        # === 8. Partners Section (multi-level) ===
         partners_section_doc = frappe.get_single("Partners Section")
         partners_rows = getattr(partners_section_doc, "partners_tab", [])
         partners_tabs = []
@@ -446,11 +445,13 @@ def get_website_content():
             "partnersTabs": partners_tabs,
         }
 
-
-        # 8. Suppliers Section
+        # === 9. Suppliers Section ===
         suppliers = frappe.get_single("Suppliers Section")
         suppliers_logos_rows = getattr(suppliers, "company_logo", [])
-        companies_logos = [full_url(getattr(row, "logo", "")) for row in suppliers_logos_rows if getattr(row, "logo", "")]
+        companies_logos = [
+            full_url(getattr(row, "logo", "")) 
+            for row in suppliers_logos_rows if getattr(row, "logo", "")
+        ]
         suppliers_section = {
             "titleAR": getattr(suppliers, "titlear", ""),
             "titleEN": getattr(suppliers, "titleen", ""),
@@ -459,7 +460,7 @@ def get_website_content():
             "companiesLogos": companies_logos,
         }
 
-        # 9. FAQ Section
+        # === 10. FAQ Section ===
         faq = frappe.get_single("FAQ Section")
         faq_questions_rows = getattr(faq, "questions", [])
         faq_section = {
@@ -477,10 +478,13 @@ def get_website_content():
             ]
         }
 
-        # 10. Testimonials Section
+        # === 11. Testimonials Section ===
         testimonials = frappe.get_single("Testimonials Section")
         testimonials_logos_rows = getattr(testimonials, "company_logo", [])
-        testimonials_companies_logos = [full_url(getattr(row, "logo", "")) for row in testimonials_logos_rows if getattr(row, "logo", "")]
+        testimonials_companies_logos = [
+            full_url(getattr(row, "logo", "")) 
+            for row in testimonials_logos_rows if getattr(row, "logo", "")
+        ]
         testimonials_rows = getattr(testimonials, "testimonial", [])
         testimonials_section = {
             "titleAR": getattr(testimonials, "titlear", ""),
