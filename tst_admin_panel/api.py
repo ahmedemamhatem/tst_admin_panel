@@ -256,14 +256,25 @@ def set_website_content():
     return {"status": "success", "message": "Website content updated successfully"}
 
 
+def clear_website_content_cache(doc=None, method=None):
+    import frappe
+    cache_key = "website_content_json"
+    frappe.cache().delete_value(cache_key)
 
 @frappe.whitelist(allow_guest=True)
 def get_website_content():
-    import frappe
-    from frappe.utils import get_url
 
+    cache_key = "website_content_json"
+    cache_ttl = 86400  
+
+    # --- 1. Attempt to serve from cache ---
+    cached = frappe.cache().get_value(cache_key)
+    if cached:
+        frappe.local.response["http_status_code"] = 200
+        return frappe.parse_json(cached)
+
+    # --- 2. Helper to construct full URLs ---
     def full_url(path):
-        """Return absolute URL for file/image/video paths."""
         if not path:
             return ""
         if path.startswith("http"):
@@ -423,9 +434,7 @@ def get_website_content():
             partners_tab_name = getattr(partners_row, "partners_tab", None)
             if not partners_tab_name:
                 continue
-            # Fetch the linked Partners Tab doc
             partners_tab_doc = frappe.get_doc("Partners Tab", partners_tab_name)
-            # Get images from its child table
             images_rows = getattr(partners_tab_doc, "image", [])
             images = [
                 full_url(getattr(img, "attach", ""))
@@ -507,8 +516,8 @@ def get_website_content():
             ],
         }
 
-        frappe.local.response["http_status_code"] = 200
-        return {
+        # --- 3. Build and cache the result ---
+        result = {
             "bannerSection": banner_section,
             "aboutUsSectionData": about_us_section,
             "branchesSectionData": branches_section,
@@ -521,6 +530,10 @@ def get_website_content():
             "faqSectionData": faq_section,
             "testimonialsSectionData": testimonials_section,
         }
+
+        frappe.cache().set_value(cache_key, frappe.as_json(result), expires_in_sec=cache_ttl)
+        frappe.local.response["http_status_code"] = 200
+        return result
 
     except Exception as e:
         frappe.local.response["http_status_code"] = 500

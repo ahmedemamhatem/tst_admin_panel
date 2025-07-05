@@ -19,6 +19,41 @@ after_migrate = [
     "tst_admin_panel.api.update_workspace_after_migration"
 ]
 
+doc_events = {
+    "Partners Section": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "Banner Section": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "About Us Section": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "Our Solutions": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "Branches Section": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "FAQ Section": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "Activity Trackers": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+    "Project Achievements": {
+        "on_update": "tst_admin_panel.api.clear_website_content_cache",
+        "on_trash": "tst_admin_panel.api.clear_website_content_cache",
+    },
+}
+
 # fixtures = [
 #     {
 #         "doctype": "Workspace",
