@@ -143,7 +143,7 @@ def set_website_content():
         doc.set("achievement", [])  # Clear existing
         for item in project_achievements_data.get("achievements", []):
             doc.append("achievement", {
-                "iconurl": item.get("iconURL", ""),   
+                "iconurl": full_url(item.get("iconURL", "")),   
                 "value": item.get("value", 0),
                 "labelar": item.get("labelAR", ""),
                 "labelen": item.get("labelEN", "")
@@ -164,7 +164,7 @@ def set_website_content():
         doc.set("solution", [])
         for s in our_solutions_data.get("solutions", []):
             doc.append("solution", {
-                "imageurl": s.get("imageURL", ""),          
+                "imageurl": full_url(s.get("imageURL", "")),        
                 "descriptionar": s.get("descriptionAR", ""),
                 "descriptionen": s.get("descriptionEN", "")
             })
@@ -388,7 +388,7 @@ def get_website_content():
             "achievements": [
                 {
                     "id": i + 1,
-                    "iconURL": getattr(row, "iconurl", ""),
+                    "iconURL": full_url(item.get("iconURL", "")),  
                     "labelAR": getattr(row, "labelar", ""),
                     "labelEN": getattr(row, "labelen", ""),
                     "value": getattr(row, "value", 0),
