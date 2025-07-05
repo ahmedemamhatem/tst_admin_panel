@@ -399,6 +399,7 @@ def get_website_content():
                 {
                     "id": i + 1,
                     "iconURL": full_url(getattr(row, "iconurl", "")),
+                    "icon": full_url(getattr(row, "iconurl", "")),
                     "labelAR": getattr(row, "labelar", ""),
                     "labelEN": getattr(row, "labelen", ""),
                     "value": getattr(row, "value", 0),
