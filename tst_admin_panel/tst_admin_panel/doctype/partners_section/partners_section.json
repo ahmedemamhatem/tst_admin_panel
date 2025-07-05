@@ -56,7 +56,7 @@
    "fieldname": "partners_tab",
    "fieldtype": "Table",
    "label": "Partners Tabs List",
-   "options": "Partners Tab"
+   "options": "Partners"
   }
  ],
  "grid_page_length": 50,

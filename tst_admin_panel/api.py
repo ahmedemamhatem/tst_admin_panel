@@ -416,27 +416,36 @@ def get_website_content():
             ],
         }
 
-        # 7. Partners Section
-        partners = frappe.get_single("Partners Section")
-        partners_tabs_rows = getattr(partners, "partners_tab", [])
+        # 7. Partners Section (multi-level indirection)
+        partners_section_doc = frappe.get_single("Partners Section")
+        partners_rows = getattr(partners_section_doc, "partners_tab", [])
         partners_tabs = []
-        for i, tab in enumerate(partners_tabs_rows, 1):
-            # If you have a child table for images under each tab:
-            images_rows = getattr(tab, "partners_tab_images", [])
-            images = [full_url(getattr(img, "image", "")) for img in images_rows if getattr(img, "image", "")]
+        for i, partners_row in enumerate(partners_rows, 1):
+            partners_tab_name = getattr(partners_row, "partners_tab", None)
+            if not partners_tab_name:
+                continue
+            # Fetch the linked Partners Tab doc
+            partners_tab_doc = frappe.get_doc("Partners Tab", partners_tab_name)
+            # Get images from its child table
+            images_rows = getattr(partners_tab_doc, "image", [])
+            images = [
+                full_url(getattr(img, "attach", ""))
+                for img in images_rows if getattr(img, "attach", "")
+            ]
             partners_tabs.append({
                 "id": i,
-                "titleAR": getattr(tab, "titlear", ""),
-                "titleEN": getattr(tab, "titleen", ""),
+                "titleAR": getattr(partners_tab_doc, "titlear", ""),
+                "titleEN": getattr(partners_tab_doc, "titleen", ""),
                 "images": images,
             })
         partners_section = {
-            "titleAR": getattr(partners, "titlear", ""),
-            "titleEN": getattr(partners, "titleen", ""),
-            "descriptionAR": getattr(partners, "descriptionar", ""),
-            "descriptionEN": getattr(partners, "descriptionen", ""),
+            "titleAR": getattr(partners_section_doc, "titlear", ""),
+            "titleEN": getattr(partners_section_doc, "titleen", ""),
+            "descriptionAR": getattr(partners_section_doc, "descriptionar", ""),
+            "descriptionEN": getattr(partners_section_doc, "descriptionen", ""),
             "partnersTabs": partners_tabs,
         }
+
 
         # 8. Suppliers Section
         suppliers = frappe.get_single("Suppliers Section")
