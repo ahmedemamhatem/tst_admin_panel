@@ -3,6 +3,47 @@ from frappe.utils.password import set_encrypted_password, check_password, update
 import json
 from frappe.utils.response import json_handler
 from frappe.utils import get_url
+from frappe.utils import now
+
+
+@frappe.whitelist(allow_guest=True)  # Allow guest access for unauthenticated requests
+def insert_contact():
+    """
+    Dynamically accept all incoming data and insert it into the 'Contact Us' doctype.
+
+    Returns:
+        dict: The inserted document.
+    """
+    # Get all data from the request
+    data = frappe.local.form_dict
+
+    # Ensure required fields are present
+    email = data.get("email")
+    subject = data.get("subject")
+    message = data.get("message")
+    contact_number = data.get("contactNumber")
+
+    if not email or not subject or not message or not contact_number:
+        frappe.throw("Fields `email`, `subject`, `message`, and `contact_number` are required!")
+
+    # Create a new document dynamically using the data received
+    doc = frappe.get_doc({
+        "doctype": "Contact Us",
+        "email": email,
+        "subject": subject,
+        "message": message,
+        "contact_number": contact_number,
+        "creation": now(),
+        "modified": now(),
+        "modified_by": frappe.session.user or "Guest",
+        "owner": frappe.session.user or "Guest",
+        # Include any additional fields dynamically
+        **{key: value for key, value in data.items() if key not in ["email", "subject", "message", "contact_number"]}
+    })
+
+    # Insert into the database
+    doc.insert(ignore_permissions=True)
+    frappe.db.commit()
 
 
 @frappe.whitelist(allow_guest=True, methods=['POST'])
@@ -263,9 +304,8 @@ def clear_website_content_cache(doc=None, method=None):
 
 @frappe.whitelist(allow_guest=True)
 def get_website_content():
-
     cache_key = "website_content_json"
-    cache_ttl = 86400  
+    cache_ttl = 86400  # Cache expiration time in seconds (1 day)
 
     # --- 1. Attempt to serve from cache ---
     cached = frappe.cache().get_value(cache_key)
@@ -427,50 +467,21 @@ def get_website_content():
             ],
         }
 
-        # === 8. Partners Section (multi-level) ===
-        partners_section_doc = frappe.get_single("Partners Section")
-        partners_rows = getattr(partners_section_doc, "partners_tab", [])
-        partners_tabs = []
-        for i, partners_row in enumerate(partners_rows, 1):
-            partners_tab_name = getattr(partners_row, "partners_tab", None)
-            if not partners_tab_name:
-                continue
-            partners_tab_doc = frappe.get_doc("Partners Tab", partners_tab_name)
-            images_rows = getattr(partners_tab_doc, "image", [])
-            images = [
-                full_url(getattr(img, "attach", ""))
-                for img in images_rows if getattr(img, "attach", "")
-            ]
-            partners_tabs.append({
-                "id": i,
-                "titleAR": getattr(partners_tab_doc, "titlear", ""),
-                "titleEN": getattr(partners_tab_doc, "titleen", ""),
-                "images": images,
-            })
-        partners_section = {
-            "titleAR": getattr(partners_section_doc, "titlear", ""),
-            "titleEN": getattr(partners_section_doc, "titleen", ""),
-            "descriptionAR": getattr(partners_section_doc, "descriptionar", ""),
-            "descriptionEN": getattr(partners_section_doc, "descriptionen", ""),
-            "partnersTabs": partners_tabs,
-        }
+        # === 8. Social Media Links Section ===
+        social_media_links = frappe.get_single("Social Media Links")
+        social_media_links_table = getattr(social_media_links, "links", [])
 
-        # === 9. Suppliers Section ===
-        suppliers = frappe.get_single("Suppliers Section")
-        suppliers_logos_rows = getattr(suppliers, "company_logo", [])
-        companies_logos = [
-            full_url(getattr(row, "logo", "")) 
-            for row in suppliers_logos_rows if getattr(row, "logo", "")
+        # Map the child table data
+        social_media_links_section = [
+            {
+                "title": link.get("title", ""),
+                "url": link.get("url", ""),
+                "icon": link.get("icon", "")
+            }
+            for link in social_media_links_table
         ]
-        suppliers_section = {
-            "titleAR": getattr(suppliers, "titlear", ""),
-            "titleEN": getattr(suppliers, "titleen", ""),
-            "descriptionAR": getattr(suppliers, "descriptionar", ""),
-            "descriptionEN": getattr(suppliers, "descriptionen", ""),
-            "companiesLogos": companies_logos,
-        }
-
-        # === 10. FAQ Section ===
+        
+        # === 9. FAQ Section ===
         faq = frappe.get_single("FAQ Section")
         faq_questions_rows = getattr(faq, "questions", [])
         faq_section = {
@@ -488,35 +499,6 @@ def get_website_content():
             ]
         }
 
-        # === 11. Testimonials Section ===
-        testimonials = frappe.get_single("Testimonials Section")
-        testimonials_logos_rows = getattr(testimonials, "company_logo", [])
-        testimonials_companies_logos = [
-            full_url(getattr(row, "logo", "")) 
-            for row in testimonials_logos_rows if getattr(row, "logo", "")
-        ]
-        testimonials_rows = getattr(testimonials, "testimonial", [])
-        testimonials_section = {
-            "titleAR": getattr(testimonials, "titlear", ""),
-            "titleEN": getattr(testimonials, "titleen", ""),
-            "descriptionAR": getattr(testimonials, "descriptionar", ""),
-            "descriptionEN": getattr(testimonials, "descriptionen", ""),
-            "companiesLogos": testimonials_companies_logos,
-            "testimonials": [
-                {
-                    "id": i + 1,
-                    "nameAR": getattr(row, "namear", ""),
-                    "nameEN": getattr(row, "nameen", ""),
-                    "positionAR": getattr(row, "positionar", ""),
-                    "positionEN": getattr(row, "positionen", ""),
-                    "feedbackAR": getattr(row, "feedbackar", ""),
-                    "feedbackEN": getattr(row, "feedbacken", ""),
-                    "rate": getattr(row, "rate", 0),
-                }
-                for i, row in enumerate(testimonials_rows)
-            ],
-        }
-
         # --- 3. Build and cache the result ---
         result = {
             "bannerSection": banner_section,
@@ -526,10 +508,8 @@ def get_website_content():
             "deviceInstallationsRegionsData": device_installations_section,
             "projectAchievementsData": project_achievements_section,
             "ourSolutionsData": our_solutions_section,
-            "partnersSectionData": partners_section,
-            "suppliersSectionData": suppliers_section,
             "faqSectionData": faq_section,
-            "testimonialsSectionData": testimonials_section,
+            "socialMediaLinksData": social_media_links_section,
         }
 
         frappe.cache().set_value(cache_key, frappe.as_json(result), expires_in_sec=cache_ttl)
