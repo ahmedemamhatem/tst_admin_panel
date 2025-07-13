@@ -9,11 +9,6 @@ app_license = "mit"
 # ------------------
 
 # required_apps = []
-doc_events = {
-    "Website User": {
-        "before_save": "tst_admin_panel.api.before_save_user"
-    }
-}
 
 after_migrate = [
     "tst_admin_panel.api.update_workspace_after_migration"

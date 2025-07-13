@@ -7,89 +7,64 @@ from frappe.utils import now
 import jwt
 import datetime
 import os
+import jwt
+import datetime
+from frappe.utils import now_datetime, add_to_date
 
 
-@frappe.whitelist(allow_guest=True) 
+@frappe.whitelist(allow_guest=True)
 def login_website_user(username, password):
-    """
-    API endpoint to verify website user login credentials and issue a token.
-
-    Args:
-        username (str): The username of the Website User.
-        password (str): The password of the Website User.
-
-    Returns:
-        JSON: Customer ID, permissions, and a token if login is successful, or an error message.
-    """
     try:
-        SECRET_KEY = "b8a9f5c4f2d6e8ab791c36e5c12f1d8f"  
-        # Ensure the static secret key is defined
-        if not SECRET_KEY:
-            frappe.local.response["http_status_code"] = 500
-            return {"error": "JWT secret key is not configured."}
+        user = frappe.db.get_value("Website User", {"user_name": username}, ["name", "customer_id", "permissions", "disabled"], as_dict=True)
 
-        # Use direct SQL to fetch user data
-        user_data = frappe.db.sql("""
-            SELECT name, user_name, disabled, customer_id, permissions
-            FROM `tabWebsite User`
-            WHERE user_name = %s
-            LIMIT 1
-        """, (username,), as_dict=True)
-
-        if not user_data:
+        if not user:
             frappe.local.response["http_status_code"] = 401
-            return {"error": "Invalid username or password."}
+            return {"error": "Invalid username or password"}
 
-        user = user_data[0]
-
-        # Check if the user is disabled
-        if user.disabled == 1:
+        if user.disabled:
             frappe.local.response["http_status_code"] = 401
-            return {"error": "User is disabled."}
+            return {"error": "User is disabled"}
 
-        # Verify the password using Frappe's check_password
         try:
-            check_password(user.user_name, password)
-        except frappe.exceptions.AuthenticationError:
+            check_password(user.name, password, doctype="Website User", fieldname="password")
+        except (frappe.AuthenticationError, ValueError):
             frappe.local.response["http_status_code"] = 401
-            return {"error": "Invalid username or password."}
+            return {"error": "Incorrect username or password"}
 
-        # Generate JWT token
-        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=24)  
-        token_payload = {
-            "username": user.user_name,
+        # JWT generation
+        import jwt, datetime
+        SECRET_KEY = frappe.conf.encryption_key
+        expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+
+        payload = {
+            "username": username,
             "customer_id": user.customer_id,
             "permissions": user.permissions,
-            "exp": expiration_time
+            "exp": int(expiration.timestamp())
         }
-        token = jwt.encode(token_payload, SECRET_KEY, algorithm="HS256")
 
-        # Save the token and expiration in the database using raw SQL
-        frappe.db.sql("""
-            UPDATE `tabWebsite User`
-            SET user_token = %s, token_expiration = %s
-            WHERE name = %s
-        """, (token, expiration_time, user['name']))
+        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        if isinstance(token, bytes):
+            token = token.decode("utf-8")
 
-        # Commit the changes to the database
-        frappe.db.commit()
+        frappe.db.set_value("Website User", user.name, {
+            "token": token,
+            "exp": expiration
+        })
 
-        # Build the response
-        response = {
+        return {
             "customer_id": user.customer_id,
             "permissions": user.permissions,
             "token": token
         }
 
-        frappe.local.response["http_status_code"] = 200
-        return response
-
     except Exception as e:
-        # Log the error in Frappe's error logs
-        frappe.log_error(message=str(e), title="Website User Login Error")
+        frappe.log_error(frappe.get_traceback(), "Login Error")
         frappe.local.response["http_status_code"] = 500
-        return {"error": "An unexpected error occurred."}
-    
+        return {"error": f"{e.__class__.__name__}: {str(e)}"}
+
+
+
 
 @frappe.whitelist(allow_guest=True)  
 def insert_contact():
@@ -379,6 +354,15 @@ def set_website_content():
 
     return {"status": "success", "message": "Website content updated successfully"}
 
+def full_url(path):
+    if not path:
+        return ""
+    if path.startswith("http"):
+        return path
+    if not path.startswith("/"):
+        path = "/" + path
+    return get_url() + path
+
 
 def clear_website_content_cache(doc=None, method=None):
     import frappe
@@ -636,9 +620,9 @@ def update_workspace_after_migration():
 
 def before_save_user(doc, method):
     if doc.password:
-        update_password(doc.user_name, doc.password)
-        doc.password = None
-
+        update_password(doc.name, doc.password, doctype="Website User", fieldname="password")
+        doc.password = None  # Hide raw password
+    frappe.msgprint("Password updated successfully.")
 
 
 @frappe.whitelist(allow_guest=True)
