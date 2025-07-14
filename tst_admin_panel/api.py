@@ -391,6 +391,23 @@ def get_website_content():
         return get_url() + path
 
     try:
+        doc = frappe.get_single("Partners Section")
+        # Build the response dictionary
+        partners_section_data = {
+            "titleAR": getattr(doc, "titlear", ""),
+            "titleEN": getattr(doc, "titleen", ""),
+            "descriptionAR": getattr(doc, "descriptionar", ""),
+            "descriptionEN": getattr(doc, "descriptionen", ""),
+            "partnersTabs": [
+                {
+                    "titleAR": getattr(row, "titlear", ""),
+                    "titleEN": getattr(row, "titleen", ""),
+                    "image": frappe.utils.get_url(row.image) if row.image else ""
+                }
+                for row in getattr(doc, "partners_tab", [])
+            ]
+        }
+        
         # === 1. Banner Section ===
         banner = frappe.get_single("Banner Section")
         banner_section = {
@@ -576,6 +593,7 @@ def get_website_content():
             "projectAchievementsData": project_achievements_section,
             "ourSolutionsData": our_solutions_section,
             "faqSectionData": faq_section,
+            "partnersSectionData": partners_section_data,
             "socialMediaLinksData": social_media_links_section,
         }
 
