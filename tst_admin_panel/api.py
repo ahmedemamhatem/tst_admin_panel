@@ -391,21 +391,32 @@ def get_website_content():
         return get_url() + path
 
     try:
-        doc = frappe.get_single("Partners Section")
-        # Build the response dictionary
-        partners_section_data = {
-            "titleAR": getattr(doc, "titlear", ""),
-            "titleEN": getattr(doc, "titleen", ""),
-            "descriptionAR": getattr(doc, "descriptionar", ""),
-            "descriptionEN": getattr(doc, "descriptionen", ""),
-            "partnersTabs": [
-                {
-                    "titleAR": getattr(row, "titlear", ""),
-                    "titleEN": getattr(row, "titleen", ""),
-                    "image": frappe.utils.get_url(row.image) if row.image else ""
-                }
-                for row in getattr(doc, "partners_tab", [])
+        # === 8. Partners Section (multi-level) ===
+        partners_section_doc = frappe.get_single("Partners Section")
+        partners_rows = getattr(partners_section_doc, "partners_tab", [])
+        partners_tabs = []
+        for i, partners_row in enumerate(partners_rows, 1):
+            partners_tab_name = getattr(partners_row, "partners_tab", None)
+            if not partners_tab_name:
+                continue
+            partners_tab_doc = frappe.get_doc("Partners Tab", partners_tab_name)
+            images_rows = getattr(partners_tab_doc, "image", [])
+            images = [
+                full_url(getattr(img, "attach", ""))
+                for img in images_rows if getattr(img, "attach", "")
             ]
+            partners_tabs.append({
+                "id": i,
+                "titleAR": getattr(partners_tab_doc, "titlear", ""),
+                "titleEN": getattr(partners_tab_doc, "titleen", ""),
+                "images": images,
+            })
+        partners_section = {
+            "titleAR": getattr(partners_section_doc, "titlear", ""),
+            "titleEN": getattr(partners_section_doc, "titleen", ""),
+            "descriptionAR": getattr(partners_section_doc, "descriptionar", ""),
+            "descriptionEN": getattr(partners_section_doc, "descriptionen", ""),
+            "partnersTabs": partners_tabs,
         }
         
         # === 1. Banner Section ===
@@ -593,7 +604,7 @@ def get_website_content():
             "projectAchievementsData": project_achievements_section,
             "ourSolutionsData": our_solutions_section,
             "faqSectionData": faq_section,
-            "partnersSectionData": partners_section_data,
+            "partnersSectionData": partners_section,
             "socialMediaLinksData": social_media_links_section,
         }
 
