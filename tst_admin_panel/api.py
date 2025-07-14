@@ -543,7 +543,7 @@ def get_website_content():
             {
                 "title": link.get("title", ""),
                 "url": link.get("url", ""),
-                "icon": link.get("icon", "")
+                "icon": get_url(link.get("icon", "")) if link.get("icon") else ""
             }
             for link in social_media_links_table
         ]
