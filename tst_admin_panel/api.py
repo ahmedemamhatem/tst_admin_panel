@@ -106,264 +106,6 @@ def insert_contact():
     frappe.db.commit()
 
 
-@frappe.whitelist(allow_guest=True, methods=['POST'])
-def set_website_content():
-
-    # --- Helper to get JSON payload ---
-    try:
-        data = frappe.local.form_dict
-        if not data or not isinstance(data, dict):
-            # Try as raw body
-            data = json.loads(frappe.request.data)
-    except Exception:
-        data = {}
-
-    # --- Helper: safe get, default to empty dict if missing ---
-    def get_section(name):
-        return data.get(name, {})
-
-    # --- Helper: update fields on doc ---
-    def update_fields(doc, mapping, input_data):
-        for target_field, input_field in mapping.items():
-            if input_field in input_data:
-                setattr(doc, target_field, input_data[input_field])
-
-    # --- About Us Section ---
-    about_us_data = get_section("aboutUsSectionData")
-    if about_us_data:
-        doc = frappe.get_single("About Us Section")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-            "subtitlear": "subTitleAR",
-            "subtitleen": "subTitleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, about_us_data)
-        # Clear child table
-        doc.set("about_us_tabs", [])
-        doc.set("aboutus_tabs", [])
-        for tab in about_us_data.get("aboutUSTabs", []):
-            doc.append("aboutus_tabs", {
-                "tablabelar": tab.get("tabLabelAR", ""),
-                "tablabelen": tab.get("tabLabelEN", ""),
-                "titlear": tab.get("titleAR", ""),
-                "titleen": tab.get("titleEN", ""),
-                "descriptionar": tab.get("descriptionAR", ""),
-                "descriptionen": tab.get("descriptionEN", ""),
-                "mediaurl": tab.get("mediaURL", ""),
-                "mediatype": tab.get("mediaType", ""),
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Branches Section ---
-    branches_data = get_section("branchesSectionData")
-    if branches_data:
-        doc = frappe.get_single("Branches Section")
-        mapping = {
-            "maintitlear": "mainTitleAR",
-            "maintitleen": "mainTitleEN",
-            "subtitlear": "subTitleAR",
-            "subtitleen": "subTitleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, branches_data)
-        doc.set("branches", [])
-        for branch in branches_data.get("branches", []):
-            loc = branch.get("location", {}) or {}
-            doc.append("branches", {
-                "branchnamear": branch.get("branchNameAR", ""),
-                "branchnameen": branch.get("branchNameEN", ""),
-                "addressar": branch.get("addressAR", ""),
-                "addressen": branch.get("addressEN", ""),
-                "phone": branch.get("phone", ""),
-                "hotline": branch.get("hotLine", ""),  
-                "descriptionar": branch.get("descriptionAR", ""),
-                "descriptionen": branch.get("descriptionEN", ""),
-                "lat": loc.get("lat", None),
-                "lng": loc.get("lng", None),
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Activity Trackers Section ---
-    activity_trackers_data = get_section("activityTrackersData")
-    if activity_trackers_data:
-        doc = frappe.get_single("Activity Trackers")
-        mapping = {
-            "maintitlear": "mainTitleAR",
-            "maintitleen": "mainTitleEN",
-        }
-        update_fields(doc, mapping, activity_trackers_data)
-        doc.set("activity_trackers", [])
-        for row in activity_trackers_data.get("data", []):
-            doc.append("activity_trackers", {
-                "labelar": row.get("labelAR", ""),
-                "labelen": row.get("labelEN", ""),
-                "value": row.get("value", 0),
-                "color": row.get("color", ""),
-                "percentage": row.get("percentage", 0),
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Device Installations Regions Section ---
-    device_installations_data = get_section("deviceInstallationsRegionsData")
-    if device_installations_data:
-        doc = frappe.get_single("Device Installations Regions")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-        }
-        update_fields(doc, mapping, device_installations_data)
-        chart = device_installations_data.get("chartData", {})
-        doc.set("region_chart_data", [])
-        for i, label in enumerate(chart.get("labels", [])):
-            dataset = chart.get("datasets", [{}])[0]
-            doc.append("region_chart_data", {
-                "label": label,
-                "value": dataset.get("data", [])[i] if i < len(dataset.get("data", [])) else 0,
-                "backgroundcolor": dataset.get("backgroundColor", [])[i] if i < len(dataset.get("backgroundColor", [])) else "",
-                "hoverbackgroundcolor": dataset.get("hoverBackgroundColor", [])[i] if i < len(dataset.get("hoverBackgroundColor", [])) else "",
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Project Achievements Section ---
-    project_achievements_data = get_section("projectAchievementsData")
-    if project_achievements_data:
-        doc = frappe.get_single("Project Achievements")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, project_achievements_data)
-        doc.set("achievement", [])  # Clear existing
-        for item in project_achievements_data.get("achievements", []):
-            doc.append("achievement", {
-                "iconurl": full_url(item.get("iconURL", "")),   
-                "value": item.get("value", 0),
-                "labelar": item.get("labelAR", ""),
-                "labelen": item.get("labelEN", "")
-            })
-        doc.save(ignore_permissions=True)
-    
-    # --- Our Solutions Section ---
-    our_solutions_data = get_section("ourSolutionsData")
-    if our_solutions_data:
-        doc = frappe.get_single("Our Solutions")
-        mapping = {
-            "titleen": "titleEN",
-            "titlear": "titleAR",
-            "descriptionen": "descriptionEN",
-            "descriptionar": "descriptionAR",
-        }
-        update_fields(doc, mapping, our_solutions_data)
-        doc.set("solution", [])
-        for s in our_solutions_data.get("solutions", []):
-            doc.append("solution", {
-                "imageurl": full_url(s.get("imageURL", "")),        
-                "descriptionar": s.get("descriptionAR", ""),
-                "descriptionen": s.get("descriptionEN", "")
-            })
-        doc.save(ignore_permissions=True)
-
-
-    # --- Partners Section ---
-    partners_data = get_section("partnersSectionData")
-    if partners_data:
-        doc = frappe.get_single("Partners Section")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, partners_data)
-        doc.set("partners_tab", [])
-        for tab in partners_data.get("partnersTabs", []):
-            doc.append("partners_tab", {
-                "titlear": tab.get("titleAR", ""),
-                "titleen": tab.get("titleEN", ""),
-                "image": tab.get("image", "")
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Suppliers Section ---
-    suppliers_data = get_section("suppliersSectionData")
-    if suppliers_data:
-        doc = frappe.get_single("Suppliers Section")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, suppliers_data)
-        doc.set("company_logos", [])
-        for img in suppliers_data.get("companiesLogos", []):
-            doc.append("company_logo", {"logo": img})
-        doc.save(ignore_permissions=True)
-
-    # --- FAQ Section ---
-    faq_data = get_section("faqSectionData")
-    if faq_data:
-        doc = frappe.get_single("FAQ Section")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-        }
-        update_fields(doc, mapping, faq_data)
-        doc.set("questions", [])
-        for q in faq_data.get("questions", []):
-            doc.append("questions", {
-                "questionar": q.get("questionAR", ""),
-                "answerar": q.get("answerAR", ""),
-                "questionen": q.get("questionEN", ""),
-                "answeren": q.get("answerEN", ""),
-            })
-        doc.save(ignore_permissions=True)
-
-    # --- Testimonials Section ---
-    testimonials_data = get_section("testimonialsSectionData")
-    if testimonials_data:
-        doc = frappe.get_single("Testimonials Section")
-        mapping = {
-            "titlear": "titleAR",
-            "titleen": "titleEN",
-            "descriptionar": "descriptionAR",
-            "descriptionen": "descriptionEN",
-        }
-        update_fields(doc, mapping, testimonials_data)
-        doc.set("company_logos", [])
-        for img in testimonials_data.get("companiesLogos", []):
-            doc.append("company_logo", {"logo": img})
-        doc.set("testimonial", [])  # Clear existing testimonials if desired
-        for t in data.get("testimonials", []):  # Your input key can be "testimonials"
-            doc.append("testimonial", {
-                "namear": t.get("nameAR", ""),
-                "positionar": t.get("positionAR", ""),
-                "rate": t.get("rate", 0),
-                "nameen": t.get("nameEN", ""),
-                "positionen": t.get("positionEN", ""),
-                "feedbackar": t.get("feedbackAR", ""),
-                "feedbacken": t.get("feedbackEN", "")
-            })
-        doc.save(ignore_permissions=True)
-
-    return {"status": "success", "message": "Website content updated successfully"}
-
-def full_url(path):
-    if not path:
-        return ""
-    if path.startswith("http"):
-        return path
-    if not path.startswith("/"):
-        path = "/" + path
-    return get_url() + path
-
-
 def clear_website_content_cache(doc=None, method=None):
     import frappe
     cache_key = "website_content_json"
@@ -417,6 +159,21 @@ def get_website_content():
             "descriptionAR": getattr(partners_section_doc, "descriptionar", ""),
             "descriptionEN": getattr(partners_section_doc, "descriptionen", ""),
             "partnersTabs": partners_tabs,
+        }
+
+        # === 9. Suppliers Section ===
+        suppliers = frappe.get_single("Suppliers Section")
+        suppliers_logos_rows = getattr(suppliers, "company_logo", [])
+        companies_logos = [
+            full_url(getattr(row, "logo", "")) 
+            for row in suppliers_logos_rows if getattr(row, "logo", "")
+        ]
+        suppliers_section = {
+            "titleAR": getattr(suppliers, "titlear", ""),
+            "titleEN": getattr(suppliers, "titleen", ""),
+            "descriptionAR": getattr(suppliers, "descriptionar", ""),
+            "descriptionEN": getattr(suppliers, "descriptionen", ""),
+            "companiesLogos": companies_logos,
         }
         
         # === 1. Banner Section ===
@@ -605,6 +362,7 @@ def get_website_content():
             "ourSolutionsData": our_solutions_section,
             "faqSectionData": faq_section,
             "partnersSectionData": partners_section,
+            "suppliersSectionData": suppliers_section,
             "socialMediaLinksData": social_media_links_section,
         }
 
