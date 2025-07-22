@@ -6,8 +6,12 @@ from frappe.utils.password import update_password
 
 class WebsiteUser(Document):
     def before_save(self):
-        if self.password:
-			
-            update_password(self.name, self.password, doctype="Website User", fieldname="password")
+        # Check if the `new_password` field is set
+        if self.new_password:
+            # Set the `password` field to the value of `new_password`
+            self.password = self.new_password
+            
+            # Clear the `new_password` field
+            self.new_password = None
 
 

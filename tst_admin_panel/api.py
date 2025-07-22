@@ -15,7 +15,13 @@ from frappe.utils import now_datetime, add_to_date
 @frappe.whitelist(allow_guest=True)
 def login_website_user(username, password):
     try:
-        user = frappe.db.get_value("Website User", {"user_name": username}, ["name", "customer_id", "permissions", "disabled"], as_dict=True)
+        # Fetch user details
+        user = frappe.db.get_value(
+            "Website User",
+            {"user_name": username},
+            ["name", "customer_id", "permissions", "disabled", "password"],
+            as_dict=True
+        )
 
         if not user:
             frappe.local.response["http_status_code"] = 401
@@ -25,13 +31,12 @@ def login_website_user(username, password):
             frappe.local.response["http_status_code"] = 401
             return {"error": "User is disabled"}
 
-        try:
-            check_password(user.name, password, doctype="Website User", fieldname="password")
-        except (frappe.AuthenticationError, ValueError):
+        # Compare passwords directly
+        if user.password != password:
             frappe.local.response["http_status_code"] = 401
             return {"error": "Incorrect username or password"}
 
-        # JWT generation
+        # Generate session token (if needed)
         import jwt, datetime
         SECRET_KEY = frappe.conf.encryption_key
         expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
@@ -47,6 +52,7 @@ def login_website_user(username, password):
         if isinstance(token, bytes):
             token = token.decode("utf-8")
 
+        # Update token in the database
         frappe.db.set_value("Website User", user.name, {
             "token": token,
             "exp": expiration
