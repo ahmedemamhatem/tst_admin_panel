@@ -19,7 +19,7 @@ def login_website_user(username, password):
         user = frappe.db.get_value(
             "Website User",
             {"user_name": username},
-            ["name", "customer_id", "permissions", "disabled", "password"],
+            ["name", "customer_id", "permissions", "disabled", "password", "customer", "token", "exp"],
             as_dict=True
         )
 
@@ -58,10 +58,30 @@ def login_website_user(username, password):
             "exp": expiration
         })
 
+        # Fetch all active sites
+        active_sites = frappe.db.sql(
+            """
+            SELECT server, api_key
+            FROM `tabSite`
+            WHERE status = 'Active'
+            """,
+            as_dict=True
+        )
+
+        # Format active sites for the response
+        formatted_active_sites = [
+            {"server_ip": site["server"], "api_key": site["api_key"]}
+            for site in active_sites
+        ]
+
+        # Return the response
         return {
+            "full_name": user.customer,
             "customer_id": user.customer_id,
+            "email": user.name,
             "permissions": user.permissions,
-            "token": token
+            "token": token,
+            "servers": formatted_active_sites
         }
 
     except Exception as e:
@@ -70,57 +90,106 @@ def login_website_user(username, password):
         return {"error": f"{e.__class__.__name__}: {str(e)}"}
 
 
-
-
-@frappe.whitelist(allow_guest=True)  
+@frappe.whitelist(allow_guest=True)
 def insert_contact():
     """
     Dynamically accept all incoming data and insert it into the 'Contact Us' doctype.
 
     Returns:
-        dict: The inserted document.
+        dict: The inserted document details or an error message.
     """
-    # Get all data from the request
-    data = frappe.local.form_dict
+    try:
+        # Get all data from the request
+        data = frappe.local.form_dict
 
-    # Ensure required fields are present
-    email = data.get("email")
-    subject = data.get("subject")
-    message = data.get("message")
-    contact_number = data.get("contactNumber")
+        # Required fields
+        required_fields = ["email", "subject", "message", "contactNumber"]
+        missing_fields = [field for field in required_fields if not data.get(field)]
 
-    if not email or not subject or not message or not contact_number:
-        frappe.throw("Fields `email`, `subject`, `message`, and `contact_number` are required!")
+        if missing_fields:
+            frappe.throw(f"The following fields are required: {', '.join(missing_fields)}")
 
-    # Create a new document dynamically using the data received
-    doc = frappe.get_doc({
-        "doctype": "Contact Us",
-        "email": email,
-        "subject": subject,
-        "message": message,
-        "contact_number": contact_number,
-        "creation": now(),
-        "modified": now(),
-        "modified_by": frappe.session.user or "Guest",
-        "owner": frappe.session.user or "Guest",
-        # Include any additional fields dynamically
-        **{key: value for key, value in data.items() if key not in ["email", "subject", "message", "contact_number"]}
-    })
+        # Validate email format
+        email = data.get("email")
+        if not frappe.utils.validate_email_address(email):
+            frappe.throw("Invalid email address format.")
 
-    # Insert into the database
-    doc.insert(ignore_permissions=True)
-    frappe.db.commit()
+        # Validate field lengths
+        subject = data.get("subject")
+        message = data.get("message")
+        if len(subject) > 100:
+            frappe.throw("Subject cannot exceed 100 characters.")
+        if len(message) > 1000:
+            frappe.throw("Message cannot exceed 1000 characters.")
 
+        # Extract required fields
+        contact_number = data.get("contact_number")
+
+        # Additional fields (avoid overwriting required fields)
+        additional_fields = {key: value for key, value in data.items() if key not in required_fields}
+
+        # Create a new document dynamically using the data received
+        doc = frappe.get_doc({
+            "doctype": "Contact Us",
+            "email": email,
+            "subject": subject,
+            "message": message,
+            "contact_number": contact_number,
+            "creation": now(),
+            "modified": now(),
+            "modified_by": frappe.session.user or "Guest",
+            "owner": frappe.session.user or "Guest",
+            **additional_fields
+        })
+
+        # Insert into the database
+        doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+
+        # Log the successful insertion
+        frappe.logger().info(f"Contact Us entry created: {doc.name}")
+
+        # Return success response
+        return {
+            "status": "success",
+            "message": "Contact entry created successfully.",
+            "document_name": doc.name
+        }
+
+    except frappe.ValidationError as ve:
+        frappe.logger().error(f"Validation Error: {str(ve)}")
+        frappe.local.response["http_status_code"] = 400
+        return {"status": "error", "message": str(ve)}
+
+    except Exception as e:
+        frappe.logger().error(f"Unexpected Error: {frappe.get_traceback()}")
+        frappe.local.response["http_status_code"] = 500
+        return {"status": "error", "message": f"An unexpected error occurred: {str(e)}"}
 
 def clear_website_content_cache(doc=None, method=None):
     import frappe
     cache_key = "website_content_json"
     frappe.cache().delete_value(cache_key)
 
+
+def ignore_auth_error():
+    # Only run this if user not already set (to avoid recursion)
+    if frappe.session.user != "Guest":
+        return
+
+    try:
+        # Try to authenticate user once
+        frappe.local.login_manager.get_user()
+    except Exception:
+        # If auth fails, fallback to Guest without looping
+        frappe.set_user("Guest")
+
+
+
 @frappe.whitelist(allow_guest=True)
 def get_website_content():
     cache_key = "website_content_json"
-    cache_ttl = 86400  # Cache expiration time in seconds (1 day)
+    cache_ttl = 86400  
 
     # --- 1. Attempt to serve from cache ---
     cached = frappe.cache().get_value(cache_key)

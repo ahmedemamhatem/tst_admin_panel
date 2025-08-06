@@ -7,6 +7,17 @@ app_license = "mit"
 
 # Apps
 # ------------------
+def conditional_ignore_auth():
+    from frappe import local
+
+    # Run only on your API method path
+    if local.request.path.startswith("/api/method/tst_admin_panel.api.get_website_content_v2"):
+        from tst_admin_panel.api import ignore_auth_error
+        ignore_auth_error()
+
+before_request = ["tst_admin_panel.hooks.conditional_ignore_auth"]
+
+
 
 # required_apps = []
 
