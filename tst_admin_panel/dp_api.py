@@ -53,10 +53,28 @@ import frappe
 import pyodbc
 
 @frappe.whitelist(allow_guest=True)
-def get_car_fuel_report(customerID, fromdate, todate):
+def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=None, limit=None):
+    # CORS Headers
     frappe.local.response["Access-Control-Allow-Origin"] = "*"
     frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Pagination logic
+    try:
+        page = int(page) if page else 1
+        # Prefer 'take', then 'limit', then default 20
+        page_size = int(take or limit or 20)
+        offset = int(offset) if offset is not None else (page-1) * page_size
+    except Exception:
+        frappe.local.response["http_status_code"] = 400
+        return {
+            "status": 0,
+            "message": "Invalid pagination parameters",
+            "data": [],
+            "total": 0,
+            "page": 1,
+            "page_size": 20
+        }
 
     conn_str = (
         "DRIVER={FreeTDS};"
@@ -69,19 +87,70 @@ def get_car_fuel_report(customerID, fromdate, todate):
     )
 
     result = []
+    total_count = 0
     try:
         conn = pyodbc.connect(conn_str, timeout=10)
         cursor = conn.cursor()
-        cursor.execute(
-            "EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?",
-            (customerID, fromdate, todate)
-        )
+
+        # Get total count for pagination
+        count_query = """
+            SELECT COUNT(*) FROM (
+                EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?
+            ) AS count_table
+        """
+
+        try:
+            cursor.execute(
+                "EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?",
+                (customerID, fromdate, todate)
+            )
+            all_rows = cursor.fetchall()
+            total_count = len(all_rows)
+        except Exception as count_ex:
+            total_count = 0  # fallback
+
+        # Apply pagination to results
+        # Use slicing on all_rows for pagination
+        paginated_rows = all_rows[offset:offset+page_size] if total_count else []
+
         columns = [column[0] for column in cursor.description]
-        for row in cursor.fetchall():
+        for row in paginated_rows:
             result.append(dict(zip(columns, row)))
+
         cursor.close()
         conn.close()
-        return {"status": 1, "data": result, "message": "Success"}
+
+        frappe.local.response["http_status_code"] = 200
+        return {
+            "status": 1,
+            "data": result,
+            "message": "Success",
+            "total": total_count,
+            "page": page,
+            "page_size": page_size
+        }
+
+    except pyodbc.DatabaseError as db_err:
+        frappe.local.response["http_status_code"] = 500
+        frappe.log_error(str(db_err), "Car Fuel Report DB Error")
+        return {
+            "status": 0,
+            "message": "Database error occurred.",
+            "data": [],
+            "total": 0,
+            "page": page,
+            "page_size": page_size,
+            "error_detail": str(db_err)
+        }
     except Exception as e:
+        frappe.local.response["http_status_code"] = 500
         frappe.log_error(str(e), "Car Fuel Report Error")
-        return {"status": 0, "data": [], "message": str(e)}
+        return {
+            "status": 0,
+            "message": "Internal server error",
+            "data": [],
+            "total": 0,
+            "page": page,
+            "page_size": page_size,
+            "error_detail": str(e)
+        }
