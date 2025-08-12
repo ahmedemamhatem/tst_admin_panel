@@ -1,70 +1,53 @@
-# sudo apt-get update
-# sudo apt-get install -y freetds-dev freetds-bin tdsodbc unixodbc unixodbc-dev python3-pip
-
-# # Install Python ODBC library
-# pip3 install pyodbc
-
-# # Add FreeTDS driver to /etc/odbcinst.ini if not already present
-# ODBCINST="/etc/odbcinst.ini"
-# FREETDS_DRIVER="Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so"
-# if ! grep -q "\[FreeTDS\]" "$ODBCINST"; then
-#   echo -e "\n[FreeTDS]\nDescription=FreeTDS Driver for MSSQL\n$FREETDS_DRIVER" | sudo tee -a "$ODBCINST"
-# else
-#   if ! grep -q "$FREETDS_DRIVER" "$ODBCINST"; then
-#     sudo sed -i "/\[FreeTDS\]/a $FREETDS_DRIVER" "$ODBCINST"
-#   fi
-# fi
-
-# echo "-------------------------------------"
-# echo "FreeTDS, ODBC, and pyodbc installed!"
-# echo "You can now use FreeTDS with pyodbc."
-# echo "-------------------------------------"
-# # 1. Update System
-# sudo apt update
-# sudo apt upgrade -y
-
-# # 2. Install unixODBC and tools
-# sudo apt install -y unixodbc unixodbc-dev odbcinst curl gpg
-
-# # 3. Add Microsoft GPG key
-# curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-
-# # 4. Add Microsoft repo for Ubuntu 22.04 (works for 24.04 too)
-# echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" | sudo tee /etc/apt/sources.list.d/msprod.list
-
-# # 5. Update package lists again
-# sudo apt update
-
-# # 6. Install MS ODBC driver
-# sudo ACCEPT_EULA=Y apt install -y msodbcsql17
-
-# # 7. Verify driver
-# echo "Installed ODBC drivers:"
-# odbcinst -q -d
-
-# # 8. Install Python package inside your virtualenv (if any)
-# # If you use a virtualenv, activate it first!
-# pip install --upgrade pip
-# pip install pyodbc
-
-# echo "All done! Your system is ready for Frappe + pyodbc + Microsoft SQL Server."
 
 import frappe
 import pyodbc
 
+CONN_PARAMS = {
+    "driver": "FreeTDS",
+    "server": "213.186.164.147",
+    "port": 1433,
+    "database": "TMS",
+    "uid": "iadmin",
+    "pwd": "ipass",
+    "tds_version": "7.3"
+}
+
+def get_connection_string(params):
+    return (
+        f"DRIVER={{{params['driver']}}};"
+        f"SERVER={params['server']};"
+        f"PORT={params['port']};"
+        f"DATABASE={params['database']};"
+        f"UID={params['uid']};"
+        f"PWD={params['pwd']};"
+        f"TDS_Version={params['tds_version']};"
+    )
+
 @frappe.whitelist(allow_guest=True)
 def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=None, limit=None):
-    # CORS Headers
+    """
+    Retrieve paginated car fuel report for a given customer and date range.
+
+    Args:
+        customerID (str): Customer ID to filter results.
+        fromdate (str): Start date for the report.
+        todate (str): End date for the report.
+        page (int, optional): Page number for pagination. Defaults to 1.
+        take (int, optional): Number of records per page (priority over limit). Defaults to None.
+        offset (int, optional): Record offset for pagination. Defaults to calculated from page and page_size.
+        limit (int, optional): Number of records per page if 'take' not provided. Defaults to None.
+
+    Returns:
+        dict: A dictionary containing status, message, data list, total record count, current page, and page size.
+    """
     frappe.local.response["Access-Control-Allow-Origin"] = "*"
     frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
 
-    # Pagination logic
     try:
         page = int(page) if page else 1
-        # Prefer 'take', then 'limit', then default 20
         page_size = int(take or limit or 20)
-        offset = int(offset) if offset is not None else (page-1) * page_size
+        offset = int(offset) if offset is not None else (page - 1) * page_size
     except Exception:
         frappe.local.response["http_status_code"] = 400
         return {
@@ -76,47 +59,23 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
             "page_size": 20
         }
 
-    conn_str = (
-        "DRIVER={FreeTDS};"
-        "SERVER=213.186.164.147;"
-        "PORT=1433;"
-        "DATABASE=TMS;"
-        "UID=iadmin;"
-        "PWD=ipass;"
-        "TDS_Version=7.3;"
-    )
-
     result = []
     total_count = 0
+    conn_str = get_connection_string(CONN_PARAMS)
+
     try:
         conn = pyodbc.connect(conn_str, timeout=10)
         cursor = conn.cursor()
-
-        # Get total count for pagination
-        count_query = """
-            SELECT COUNT(*) FROM (
-                EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?
-            ) AS count_table
-        """
-
-        try:
-            cursor.execute(
-                "EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?",
-                (customerID, fromdate, todate)
-            )
-            all_rows = cursor.fetchall()
-            total_count = len(all_rows)
-        except Exception as count_ex:
-            total_count = 0  # fallback
-
-        # Apply pagination to results
-        # Use slicing on all_rows for pagination
-        paginated_rows = all_rows[offset:offset+page_size] if total_count else []
-
+        cursor.execute(
+            "EXEC dbo.uspGetCarFuelReport @customerID=?, @fromdate=?, @todate=?",
+            (customerID, fromdate, todate)
+        )
+        all_rows = cursor.fetchall()
+        total_count = len(all_rows)
+        paginated_rows = all_rows[offset:offset + page_size] if total_count else []
         columns = [column[0] for column in cursor.description]
         for row in paginated_rows:
             result.append(dict(zip(columns, row)))
-
         cursor.close()
         conn.close()
 
