@@ -40,9 +40,9 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
     Returns:
         dict: A dictionary containing status, message, data list, total record count, current page, and page size.
     """
-    frappe.local.response["Access-Control-Allow-Origin"] = "*"
-    frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
+    #frappe.local.response["Access-Control-Allow-Origin"] = "*"
+    #frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    #frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
 
     try:
         page = int(page) if page else 1
@@ -131,9 +131,9 @@ def get_kpi(customerID, fromdate, todate, page=1, take=None, offset=None, limit=
     Returns:
         dict: A dictionary containing status, message, data list, total record count, current page, and page size.
     """
-    frappe.local.response["Access-Control-Allow-Origin"] = "*"
-    frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
+    #frappe.local.response["Access-Control-Allow-Origin"] = "*"
+    #frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    #frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
 
     try:
         page = int(page) if page else 1
@@ -222,9 +222,9 @@ def get_car_consum_report(customerID, fromdate, todate, page=1, take=None, offse
     Returns:
         dict: A dictionary containing status, message, data list, total record count, current page, and page size.
     """
-    frappe.local.response["Access-Control-Allow-Origin"] = "*"
-    frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
+    #frappe.local.response["Access-Control-Allow-Origin"] = "*"
+    #frappe.local.response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    #frappe.local.response["Access-Control-Allow-Headers"] = "Content-Type"
 
     try:
         page = int(page) if page else 1
