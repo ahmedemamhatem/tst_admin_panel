@@ -24,36 +24,17 @@ def get_connection_string(params):
     )
 
 @frappe.whitelist(allow_guest=True)
-def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=None, limit=None):
+def get_car_fuel_report(customerID, fromdate, todate):
     """
-    Retrieve paginated car fuel report for a given customer and date range.
+    Retrieve car fuel report for a given customer and date range without pagination.
     Args:
         customerID (str): Customer ID to filter results.
         fromdate (str): Start date for the report.
         todate (str): End date for the report.
-        page (int, optional): Page number for pagination. Defaults to 1.
-        take (int, optional): Number of records per page (priority over limit). Defaults to None.
-        offset (int, optional): Record offset for pagination. Defaults to calculated from page and page_size.
-        limit (int, optional): Number of records per page if 'take' not provided. Defaults to None.
 
     Returns:
-        dict: A dictionary containing status, message, data list, total record count, current page, and page size.
+        dict: A dictionary containing status, message, data list, and total record count.
     """
-    try:
-        page = int(page) if page else 1
-        page_size = int(take or limit or 20)
-        offset = int(offset) if offset is not None else (page - 1) * page_size
-    except Exception:
-        frappe.local.response["http_status_code"] = 400
-        return {
-            "status": 0,
-            "message": "Invalid pagination parameters",
-            "data": [],
-            "total": 0,
-            "page": 1,
-            "page_size": 20
-        }
-
     result = []
     total_count = 0
     conn_str = get_connection_string(CONN_PARAMS)
@@ -67,9 +48,8 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
         )
         all_rows = cursor.fetchall()
         total_count = len(all_rows)
-        paginated_rows = all_rows[offset:offset + page_size] if total_count else []
         columns = [column[0] for column in cursor.description]
-        for row in paginated_rows:
+        for row in all_rows:
             result.append(dict(zip(columns, row)))
         cursor.close()
         conn.close()
@@ -79,9 +59,7 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
             "status": 1,
             "data": result,
             "message": "Success",
-            "total": total_count,
-            "page": page,
-            "page_size": page_size
+            "total": total_count
         }
 
     except pyodbc.DatabaseError as db_err:
@@ -92,8 +70,6 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
             "message": "Database error occurred.",
             "data": [],
             "total": 0,
-            "page": page,
-            "page_size": page_size,
             "error_detail": str(db_err)
         }
     except Exception as e:
@@ -104,10 +80,9 @@ def get_car_fuel_report(customerID, fromdate, todate, page=1, take=None, offset=
             "message": "Internal server error",
             "data": [],
             "total": 0,
-            "page": page,
-            "page_size": page_size,
             "error_detail": str(e)
         }
+        
 
 @frappe.whitelist(allow_guest=True)
 def get_kpi(customerID, fromdate, todate, page=1, take=None, offset=None, limit=None):
@@ -197,37 +172,18 @@ def get_kpi(customerID, fromdate, todate, page=1, take=None, offset=None, limit=
         }
 
 @frappe.whitelist(allow_guest=True)
-def get_car_consum_report(customerID, fromdate, todate, page=1, take=None, offset=None, limit=None):
+def get_car_consum_report(customerID, fromdate, todate):
     """
-    Retrieve paginated car fuel report for a given customer and date range.
+    Retrieve car consumption report for a given customer and date range without pagination.
 
     Args:
         customerID (str): Customer ID to filter results.
         fromdate (str): Start date for the report.
         todate (str): End date for the report.
-        page (int, optional): Page number for pagination. Defaults to 1.
-        take (int, optional): Number of records per page (priority over limit). Defaults to None.
-        offset (int, optional): Record offset for pagination. Defaults to calculated from page and page_size.
-        limit (int, optional): Number of records per page if 'take' not provided. Defaults to None.
 
     Returns:
-        dict: A dictionary containing status, message, data list, total record count, current page, and page size.
+        dict: A dictionary containing status, message, data list, and total record count.
     """
-
-    try:
-        page = int(page) if page else 1
-        page_size = int(take or limit or 20)
-        offset = int(offset) if offset is not None else (page - 1) * page_size
-    except Exception:
-        frappe.local.response["http_status_code"] = 400
-        return {
-            "status": 0,
-            "message": "Invalid pagination parameters",
-            "data": [],
-            "total": 0,
-            "page": 1,
-            "page_size": 20
-        }
 
     result = []
     total_count = 0
@@ -242,9 +198,8 @@ def get_car_consum_report(customerID, fromdate, todate, page=1, take=None, offse
         )
         all_rows = cursor.fetchall()
         total_count = len(all_rows)
-        paginated_rows = all_rows[offset:offset + page_size] if total_count else []
         columns = [column[0] for column in cursor.description]
-        for row in paginated_rows:
+        for row in all_rows:
             result.append(dict(zip(columns, row)))
         cursor.close()
         conn.close()
@@ -254,33 +209,27 @@ def get_car_consum_report(customerID, fromdate, todate, page=1, take=None, offse
             "status": 1,
             "data": result,
             "message": "Success",
-            "total": total_count,
-            "page": page,
-            "page_size": page_size
+            "total": total_count
         }
 
     except pyodbc.DatabaseError as db_err:
         frappe.local.response["http_status_code"] = 500
-        frappe.log_error(str(db_err), "Car Fuel Report DB Error")
+        frappe.log_error(str(db_err), "Car Consumption Report DB Error")
         return {
             "status": 0,
             "message": "Database error occurred.",
             "data": [],
             "total": 0,
-            "page": page,
-            "page_size": page_size,
             "error_detail": str(db_err)
         }
     except Exception as e:
         frappe.local.response["http_status_code"] = 500
-        frappe.log_error(str(e), "Car Fuel Report Error")
+        frappe.log_error(str(e), "Car Consumption Report Error")
         return {
             "status": 0,
             "message": "Internal server error",
             "data": [],
             "total": 0,
-            "page": page,
-            "page_size": page_size,
             "error_detail": str(e)
         }
 
