@@ -13,6 +13,24 @@ CONN_PARAMS = {
     "tds_version": "7.3"
 }
 
+
+def get_cache_key(function_name, filters):
+    """
+    Generate a unique cache key based on the function name and filters.
+
+    Args:
+        function_name (str): Name of the function being cached.
+        filters (dict): Filters used for the query.
+
+    Returns:
+        str: A unique cache key.
+    """
+    # Serialize the filters dictionary into a sorted JSON string
+    filters_string = json.dumps(filters, sort_keys=True)
+    # Generate an MD5 hash of the string to ensure a unique key
+    hashed_filters = hashlib.md5(filters_string.encode()).hexdigest()
+    # Combine the function name and hashed filters into the cache key
+    return f"{function_name}:{hashed_filters}"
 def get_connection_string(params):
     """
     Build the connection string for the database.
@@ -57,9 +75,12 @@ def execute_stored_procedure(procedure_name, params):
         frappe.log_error(str(e), f"{procedure_name} Error")
         raise RuntimeError(f"An error occurred during {procedure_name}: {e}")
 
+from datetime import date, datetime
+
 def format_response(rows, columns):
     """
     Format the rows and columns into a list of dictionaries.
+    Converts date or datetime objects to ISO 8601 strings.
 
     Args:
         rows (list): List of rows from the database.
@@ -68,22 +89,16 @@ def format_response(rows, columns):
     Returns:
         list: Formatted list of dictionaries with column names as keys.
     """
-    return [dict(zip(columns, row)) for row in rows]
-
-def get_cache_key(function_name, filters):
-    """
-    Generate a unique cache key based on the function name and filters.
-
-    Args:
-        function_name (str): Name of the function being cached.
-        filters (dict): Filters used for the query.
-
-    Returns:
-        str: A unique cache key.
-    """
-    filters_string = json.dumps(filters, sort_keys=True)
-    hashed_filters = hashlib.md5(filters_string.encode()).hexdigest()
-    return f"{function_name}:{hashed_filters}"
+    formatted_data = []
+    for row in rows:
+        formatted_row = {}
+        for col_name, value in zip(columns, row):
+            if isinstance(value, (date, datetime)):  # Convert date and datetime objects
+                formatted_row[col_name] = value.isoformat()
+            else:
+                formatted_row[col_name] = value
+        formatted_data.append(formatted_row)
+    return formatted_data
 
 def get_data_with_cache(function_name, procedure_name, filters):
     """
