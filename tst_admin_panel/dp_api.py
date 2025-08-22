@@ -155,6 +155,30 @@ def get_car_fuel_report(customerID, fromdate, todate):
         }
 
 @frappe.whitelist(allow_guest=True)
+def get_car_sum_fuel_report(customerID, fromdate, todate):
+    """
+    Retrieve car fuel report for a given customer and date range.
+    """
+    try:
+        filters = {"customerID": customerID, "fromdate": fromdate, "todate": todate}
+        result = get_data_with_cache("get_car_sum_fuel_report", "dbo.uspGetCarSUMFuelReport", filters)
+        return {
+            "status": 1,
+            "data": result,
+            "message": "Success",
+            "total": len(result)
+        }
+    except RuntimeError as e:
+        frappe.local.response["http_status_code"] = 500
+        return {
+            "status": 0,
+            "message": str(e),
+            "data": [],
+            "total": 0
+        }
+
+
+@frappe.whitelist(allow_guest=True)
 def get_car_consum_report(customerID, fromdate, todate):
     """
     Retrieve car consumption report for a given customer and date range.
