@@ -2,6 +2,7 @@ import frappe
 import pyodbc
 import hashlib
 import json
+from datetime import date, datetime
 
 CONN_PARAMS = {
     "driver": "FreeTDS",
@@ -31,6 +32,8 @@ def get_cache_key(function_name, filters):
     hashed_filters = hashlib.md5(filters_string.encode()).hexdigest()
     # Combine the function name and hashed filters into the cache key
     return f"{function_name}:{hashed_filters}"
+
+
 def get_connection_string(params):
     """
     Build the connection string for the database.
@@ -44,6 +47,7 @@ def get_connection_string(params):
         f"PWD={params['pwd']};"
         f"TDS_Version={params['tds_version']};"
     )
+
 
 def execute_stored_procedure(procedure_name, params):
     """
@@ -75,7 +79,6 @@ def execute_stored_procedure(procedure_name, params):
         frappe.log_error(str(e), f"{procedure_name} Error")
         raise RuntimeError(f"An error occurred during {procedure_name}: {e}")
 
-from datetime import date, datetime
 
 def format_response(rows, columns):
     """
@@ -99,6 +102,7 @@ def format_response(rows, columns):
                 formatted_row[col_name] = value
         formatted_data.append(formatted_row)
     return formatted_data
+
 
 def get_data_with_cache(function_name, procedure_name, filters):
     """
@@ -129,7 +133,6 @@ def get_data_with_cache(function_name, procedure_name, filters):
 
     return result
 
-# Enhanced APIs with Caching
 
 @frappe.whitelist(allow_guest=True)
 def get_car_fuel_report(customerID, fromdate, todate):
