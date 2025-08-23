@@ -251,13 +251,13 @@ def get_fuel_distribution(customerID, fromdate, todate):
         }
 
 @frappe.whitelist(allow_guest=True)
-def get_top10_car_fuel_report(customerID, fromdate, todate):
+def get_Top10_Car_Fuel_Report(customerID, fromdate, todate):
     """
     Retrieve top 10 car fuel report for a given customer and date range.
     """
     try:
         filters = {"customerID": customerID, "fromdate": fromdate, "todate": todate}
-        result = get_data_with_cache("get_top10_car_fuel_report", "dbo.uspGetTop10CarFuelReport", filters)
+        result = get_data_with_cache("get_Top10_Car_Fuel_Report", "dbo.uspGetTop10CarFuelReport", filters)
         return {
             "status": 1,
             "data": result,
@@ -274,13 +274,13 @@ def get_top10_car_fuel_report(customerID, fromdate, todate):
         }
 
 @frappe.whitelist(allow_guest=True)
-def get_fuel_distribution_line(customerID, fromdate, todate):
+def Fuel_Distribution_Line(customerID, fromdate, todate):
     """
     Retrieve fuel distribution line report for a given customer and date range.
     """
     try:
         filters = {"customerID": customerID, "fromdate": fromdate, "todate": todate}
-        result = get_data_with_cache("get_fuel_distribution_line", "dbo.uspGetFuelDistributionLine", filters)
+        result = get_data_with_cache("Fuel_Distribution_Line", "dbo.uspGetFuelDistributionLine", filters)
         return {
             "status": 1,
             "data": result,
