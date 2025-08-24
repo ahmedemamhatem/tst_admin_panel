@@ -274,6 +274,53 @@ def get_Top10_Car_Fuel_Report(customerID, fromdate, todate):
         }
 
 @frappe.whitelist(allow_guest=True)
+def get_fill_per_station(customerID, fromdate, todate):
+    """
+    Retrieve top 10 car fuel report for a given customer and date range.
+    """
+    try:
+        filters = {"customerID": customerID, "fromdate": fromdate, "todate": todate}
+        result = get_data_with_cache("get_fill_per_station", "dbo.uspGetfillperstation", filters)
+        return {
+            "status": 1,
+            "data": result,
+            "message": "Success",
+            "total": len(result)
+        }
+    except RuntimeError as e:
+        frappe.local.response["http_status_code"] = 500
+        return {
+            "status": 0,
+            "message": str(e),
+            "data": [],
+            "total": 0
+        }
+
+@frappe.whitelist(allow_guest=True)
+def get_alarm_detail(customerID, fromdate, todate):
+    """
+    Retrieve top 10 car fuel report for a given customer and date range.
+    """
+    try:
+        filters = {"customerID": customerID, "fromdate": fromdate, "todate": todate}
+        result = get_data_with_cache("get_alarm_detail", "dbo.uspGetAlarmDetail", filters)
+        return {
+            "status": 1,
+            "data": result,
+            "message": "Success",
+            "total": len(result)
+        }
+    except RuntimeError as e:
+        frappe.local.response["http_status_code"] = 500
+        return {
+            "status": 0,
+            "message": str(e),
+            "data": [],
+            "total": 0
+        }
+
+
+@frappe.whitelist(allow_guest=True)
 def get_Fuel_Distribution_Line(customerID, fromdate, todate):
     """
     Retrieve fuel distribution line report for a given customer and date range.
